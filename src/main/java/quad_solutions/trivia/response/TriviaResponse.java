@@ -1,4 +1,4 @@
-package quad_solutions.trivia;
+package quad_solutions.trivia.response;
 
 import java.util.List;
 

@@ -2,8 +2,8 @@ package quad_solutions.trivia.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import quad_solutions.trivia.TriviaResponse;
-import quad_solutions.trivia.TriviaApplication;
+import quad_solutions.trivia.response.TriviaResponse;
+import quad_solutions.trivia.response.TriviaResponseEdited;
 import quad_solutions.trivia.service.TriviaService;
 
 @RestController
@@ -15,7 +15,7 @@ public class TriviaController {
     }
 
     @GetMapping("/get-questions")
-    public TriviaResponse getFiveQuestions() {
+    public TriviaResponseEdited getFiveQuestions() {
         return triviaService.getQuestions(5);
     }
 }
