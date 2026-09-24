@@ -23,10 +23,24 @@ public class TriviaService {
     }
 
     // Method to get n questions, without category, difficulty etc
-    public TriviaResponseEdited getQuestions(int amount) {
+    public TriviaResponseEdited getQuestions(int amount, String category, String difficulty, String type) {
+        StringBuilder url = new StringBuilder("/api.php?amount=" + amount);
+
+        if (category != null && !category.equals("any")) {
+            url.append("&category=").append(category);
+        }
+        if (difficulty != null && !difficulty.equals("any")) {
+            url.append("&difficulty=").append(difficulty);
+        }
+        System.out.println(type);
+        if (type != null && !type.equals("any")) {
+            url.append("&type=").append(type);
+        }
+
+        System.out.println(url);
         TriviaResponse question = restClient.
                 get()
-                .uri("/api.php?amount={amount}", amount)
+                .uri(String.valueOf(url))
                 .retrieve()
                 .body(TriviaResponse.class);
         TriviaResponseEdited result = new TriviaResponseEdited(question.results().stream().map(this::transformQuestion).toList());
