@@ -14,8 +14,26 @@ async function generateQuestions() {
 
 
     const amount = document.getElementById("quantity").value;
+    const category = document.getElementById("category").value;
+    const difficulty = document.getElementById("difficulty").value;
+    const type = document.getElementById("type").value;
 
-    const response = await fetch("http://localhost:8080/get-questions?amount=" + amount);
+    console.log(type);
+
+    let url = "http://localhost:8080/get-questions?amount=" + amount;
+    if (category !== "any") {
+        url += `&category=${category}`
+    }
+    if (difficulty !== "any") {
+        url += `&difficulty=${difficulty}`
+    }
+    if (type !== "any") {
+        console.log("Succes")
+        url += `&type=${type}`
+    }
+
+    console.log(url)
+    const response = await fetch(url);
     const data = await response.json();
 
     currentQuestions = data.results;

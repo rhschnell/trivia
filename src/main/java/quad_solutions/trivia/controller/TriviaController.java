@@ -28,8 +28,12 @@ public class TriviaController {
 //    }
 
     @GetMapping("/get-questions")
-    public TriviaResponseEdited getQuestions(@RequestParam(defaultValue = "5") int amount) {
-        return triviaService.getQuestions(amount);
+    public TriviaResponseEdited getQuestions(
+            @RequestParam(defaultValue = "5") int amount,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String difficulty,
+            @RequestParam(required = false) String type) {
+        return triviaService.getQuestions(amount, category, difficulty, type);
     }
 
     @PostMapping("/checkanswers")
