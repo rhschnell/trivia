@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trivia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="center">
+    <label for="quantity">How many questions do you want to generate?</label>
+    <input type="number" id="quantity" name="quantity" min="1" max="50">
+
+    <button type="button" onclick=generateQuestions()>Generate questions!</button>
+
+    <div
+            id="question-container">
+    </div>
+</div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>

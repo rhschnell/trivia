@@ -1,6 +1,9 @@
 package quad_solutions.trivia.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
+import java.util.UUID;
 
 public record TriviaResponseEdited (List<EditedQuestion> results) {
         public record EditedQuestion(
@@ -8,7 +11,10 @@ public record TriviaResponseEdited (List<EditedQuestion> results) {
                 String type,
                 String difficulty,
                 String question,
-                List<String> answers
+                List<String> answers,
+                @JsonIgnore String correctAnswer,
+                UUID id
+//                String correctAnswer
         ) {
         }
 }
