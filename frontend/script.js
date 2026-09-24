@@ -28,7 +28,7 @@ async function generateQuestions() {
         x.answers = x.answers.map(decodeHtmlEntities);
 
         const question = document.createElement("div");
-        question.className = "question-box";
+        question.className = "question-box center";
         question.setAttribute("question-id", x.id)
 
         question.innerHTML = `<h3> ${x.question} </h3>`
@@ -39,11 +39,13 @@ async function generateQuestions() {
         container.appendChild(question)
     });
 
-    document.getElementById("check-answer").classList.remove("hidden");
+    document.getElementById("check-answer-top").classList.remove("hidden");
+    document.getElementById("check-answer-bottom").classList.remove("hidden");
 }
 
 async function getAnswers() {
-    document.getElementById("check-answer").classList.add("hidden");
+    document.getElementById("check-answer-top").classList.add("hidden");
+    document.getElementById("check-answer-bottom").classList.add("hidden");
 
     const ids = currentQuestions.map(x => x.id)
 

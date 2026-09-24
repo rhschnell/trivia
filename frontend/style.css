@@ -1,3 +1,65 @@
+.input-section {
+    display: flex;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.input-amount {
+    width: 60px;
+    background-color: #eef2ff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 8px;
+    outline: none;
+    text-align: center;
+    border: 2px solid #ccc;
+}
+
+.input-amount:focus {
+    border-color: #0066cc;
+}
+
+.button:hover {
+    background-color: #bcceec;
+    border: 2px solid #0066cc;
+}
+
+.button {
+    background-color: #eef2ff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+}
+
+.input-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.title-question {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Question containers: */
 /* contains all questions, stacks them vertically */
 #question-container {
     display: flex;
@@ -9,16 +71,8 @@
 /* Adds border around each single question */
 .question-box {
     border: 1px solid #ccc;
-    padding: 10px;
-}
-
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.hidden {
-    display: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    width: 540px;
+    text-align: center;
 }
