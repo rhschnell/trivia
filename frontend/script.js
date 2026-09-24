@@ -32,33 +32,37 @@ async function generateQuestions() {
         url += `&type=${type}`
     }
 
-    console.log(url)
-    const response = await fetch(url);
-    const data = await response.json();
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
 
-    currentQuestions = data.results;
+        currentQuestions = data.results;
 
-    const container = document.getElementById("question-container");
-    container.innerHTML = "";
+        const container = document.getElementById("question-container");
+        container.innerHTML = "";
 
-    data.results.forEach((x) => {
-        x.question = decodeHtmlEntities(x.question);
-        x.answers = x.answers.map(decodeHtmlEntities);
+        data.results.forEach((x) => {
+            x.question = decodeHtmlEntities(x.question);
+            x.answers = x.answers.map(decodeHtmlEntities);
 
-        const question = document.createElement("div");
-        question.className = "question-box center";
-        question.setAttribute("question-id", x.id)
+            const question = document.createElement("div");
+            question.className = "question-box center";
+            question.setAttribute("question-id", x.id)
 
-        question.innerHTML = `<h3> ${x.question} </h3>`
-        x.answers.forEach((answer) => {
-            question.innerHTML += `<p question-answer="${answer}">${answer}</p>`
+            question.innerHTML = `<h3> ${x.question} </h3>`
+            x.answers.forEach((answer) => {
+                question.innerHTML += `<p question-answer="${answer}">${answer}</p>`
+            });
+
+            container.appendChild(question)
         });
 
-        container.appendChild(question)
-    });
-
-    document.getElementById("check-answer-top").classList.remove("hidden");
-    document.getElementById("check-answer-bottom").classList.remove("hidden");
+        document.getElementById("check-answer-top").classList.remove("hidden");
+        document.getElementById("check-answer-bottom").classList.remove("hidden");
+    } catch (e) {
+        console.error("Error: ", e);
+        alert("Bad request was made. This is probably because there weren't enough questions available with these criteria. Try changing some parameters");
+    }
 }
 
 async function getAnswers() {
