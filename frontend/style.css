@@ -1,0 +1,20 @@
+/* contains all questions, stacks them vertically */
+#question-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Adds border around each single question */
+.question-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

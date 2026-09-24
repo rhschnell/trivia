@@ -10,13 +10,16 @@ import quad_solutions.trivia.response.TriviaResponseEdited;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TriviaService {
     private final RestClient restClient;
+    private final AnswerService answerService;
 
-    public TriviaService(RestClient restClient) {
+    public TriviaService(RestClient restClient, AnswerService answerService) {
         this.restClient = restClient;
+        this.answerService = answerService;
     }
 
     // Method to get n questions, without category, difficulty etc
@@ -37,12 +40,17 @@ public class TriviaService {
         answers.add(question.correct_answer());
         Collections.shuffle(answers);
 
+        UUID id = UUID.randomUUID();
+        answerService.store(id, question.correct_answer());
+
         return new EditedQuestion(
                 question.category(),
                 question.type(),
                 question.difficulty(),
                 question.question(),
-                answers
+                answers,
+                question.correct_answer(),
+                id
         );
     }
 }
