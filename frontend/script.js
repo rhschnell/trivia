@@ -1,61 +1,25 @@
 
 let currentQuestions = [];
 let lastTimeCaptured = 0;
+const COOLDOWN = 5000;
 
 async function generateQuestions() {
-    const currentTime = Date.now();
-    const cooldown = 5000; // API can only be called once every 5 seconds
+    if (cooldownCheck()) return;
 
-    if (currentTime - lastTimeCaptured < cooldown) {
-        alert("Please wait before generating more questions");
-        return;
-    }
-    lastTimeCaptured = currentTime;
-
-
-    const amount = document.getElementById("quantity").value;
-    const category = document.getElementById("category").value;
-    const difficulty = document.getElementById("difficulty").value;
-    const type = document.getElementById("type").value;
-
-    console.log(type);
-
-    let url = "http://localhost:8080/get-questions?amount=" + amount;
-    if (category !== "any") {
-        url += `&category=${category}`
-    }
-    if (difficulty !== "any") {
-        url += `&difficulty=${difficulty}`
-    }
-    if (type !== "any") {
-        console.log("Succes")
-        url += `&type=${type}`
-    }
+    const url = buildURL();
 
     try {
         const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`Server responded with the following status: ${response.status}`)
+        }
+
         const data = await response.json();
 
-        currentQuestions = data.results;
+        currentQuestions = data.results || [];
 
-        const container = document.getElementById("question-container");
-        container.innerHTML = "";
-
-        data.results.forEach((x) => {
-            x.question = decodeHtmlEntities(x.question);
-            x.answers = x.answers.map(decodeHtmlEntities);
-
-            const question = document.createElement("div");
-            question.className = "question-box center";
-            question.setAttribute("question-id", x.id)
-
-            question.innerHTML = `<h3> ${x.question} </h3>`
-            x.answers.forEach((answer) => {
-                question.innerHTML += `<p question-answer="${answer}">${answer}</p>`
-            });
-
-            container.appendChild(question)
-        });
+        renderQuestions(currentQuestions);
 
         document.getElementById("check-answer-top").classList.remove("hidden");
         document.getElementById("check-answer-bottom").classList.remove("hidden");
@@ -84,14 +48,58 @@ async function getAnswers() {
         const questionBox = document.querySelector(`.question-box[question-id="${id}"]`);
         const answer = questionBox.querySelector(`p[question-answer="${CSS.escape(correct)}"]`);
 
-        // console.log(`Question: ${id}`)
-        // console.log(correct)
-        // console.log(answer)
-
         answer.innerHTML = "✔ " + answer.innerHTML;
     }
+}
 
-    console.log(correctAnswers);
+function buildURL() {
+    const amount = document.getElementById("quantity").value;
+    const category = document.getElementById("category").value;
+    const difficulty = document.getElementById("difficulty").value;
+    const type = document.getElementById("type").value;
+
+
+    let url = "http://localhost:8080/get-questions?amount=" + amount;
+
+    if (category !== "any") url += `&category=${category}`;
+    if (difficulty !== "any") url += `&difficulty=${difficulty}`;
+    if (type !== "any") url += `&type=${type}`
+
+    return url;
+}
+
+function renderQuestions(data) {
+    const container = document.getElementById("question-container");
+    container.innerHTML = "";
+
+    data.forEach((x) => {
+        x.question = decodeHtmlEntities(x.question);
+        x.answers = x.answers.map(decodeHtmlEntities);
+
+        const question = document.createElement("div");
+        question.className = "question-box center";
+        question.setAttribute("question-id", x.id)
+
+        question.innerHTML = `<h3> ${x.question} </h3>`
+        x.answers.forEach((answer) => {
+            question.innerHTML += `<p question-answer="${answer}">${answer}</p>`
+        });
+
+        container.appendChild(question)
+    });
+}
+
+function cooldownCheck() {
+    const currentTime = Date.now();
+
+    if (currentTime - lastTimeCaptured < COOLDOWN) {
+        alert("Please wait before generating more questions");
+        return true;
+    }
+
+    lastTimeCaptured = currentTime;
+
+    return false;
 }
 
 // Found on https://tertiumnon.medium.com/js-how-to-decode-html-entities-8ea807a140e5

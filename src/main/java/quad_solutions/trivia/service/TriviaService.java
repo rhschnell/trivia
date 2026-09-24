@@ -26,21 +26,12 @@ public class TriviaService {
 
     // Method to get n questions, without category, difficulty etc
     public TriviaResponseEdited getQuestions(int amount, String category, String difficulty, String type) {
-        StringBuilder url = new StringBuilder("/api.php?amount=" + amount);
 
-        if (category != null && !category.equals("any")) {
-            url.append("&category=").append(category);
-        }
-        if (difficulty != null && !difficulty.equals("any")) {
-            url.append("&difficulty=").append(difficulty);
-        }
-        if (type != null && !type.equals("any")) {
-            url.append("&type=").append(type);
-        }
+        String url = buildURL(amount, category, difficulty, type);
 
         TriviaResponse question = restClient.
                 get()
-                .uri(String.valueOf(url))
+                .uri(url)
                 .retrieve()
                 .body(TriviaResponse.class);
 
@@ -79,5 +70,21 @@ public class TriviaService {
                 question.correct_answer(),
                 id
         );
+    }
+
+    private String buildURL(int amount, String category, String difficulty, String type) {
+        StringBuilder url = new StringBuilder("/api.php?amount=" + amount);
+
+        if (category != null && !category.equals("any")) {
+            url.append("&category=").append(category);
+        }
+        if (difficulty != null && !difficulty.equals("any")) {
+            url.append("&difficulty=").append(difficulty);
+        }
+        if (type != null && !type.equals("any")) {
+            url.append("&type=").append(type);
+        }
+
+        return url.toString();
     }
 }

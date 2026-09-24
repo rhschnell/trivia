@@ -22,11 +22,6 @@ public class TriviaController {
         this.answerService = answerService;
     }
 
-//    @GetMapping("/get-questions")
-//    public TriviaResponseEdited getFiveQuestions() {
-//        return triviaService.getQuestions(5);
-//    }
-
     @GetMapping("/get-questions")
     public TriviaResponseEdited getQuestions(
             @RequestParam(defaultValue = "5") int amount,
