@@ -1,11 +1,13 @@
 
+let currentQuestions = [];
+
 async function generateQuestions() {
     const amount = document.getElementById("quantity").value;
 
     const response = await fetch("http://localhost:8080/get-questions?amount=" + amount);
     const data = await response.json();
 
-    // console.log(data.results);
+    currentQuestions = data.results;
 
     const container = document.getElementById("question-container");
     container.innerHTML = "";
@@ -15,11 +17,28 @@ async function generateQuestions() {
         const question = document.createElement("div");
         question.className = "question-box";
 
-        question.innerHTML = "<h3> ${x.question} </h3>"
+        question.innerHTML = `<h3> ${x.question} </h3>`
         x.answers.forEach((answer) => {
-            question.innerHTML += "<p> ${answer} </p>"
+            question.innerHTML += `<p> ${answer} </p>`
         });
 
         container.appendChild(question)
     });
+
+    document.getElementById("check-answer").classList.remove("hidden");
+}
+
+async function getAnswers() {
+    const ids = currentQuestions.map(x => x.id)
+
+    const response = await fetch("http://localhost:8080/checkanswers", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(ids)
+    });
+
+    const correctAnswers = await response.json();
+
+    
+    console.log(correctAnswers);
 }
