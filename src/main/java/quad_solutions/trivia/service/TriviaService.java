@@ -1,7 +1,9 @@
 package quad_solutions.trivia.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.server.ResponseStatusException;
 import quad_solutions.trivia.response.TriviaResponse;
 import quad_solutions.trivia.response.TriviaResponse.Question;
 import quad_solutions.trivia.response.TriviaResponseEdited.EditedQuestion;
@@ -32,20 +34,31 @@ public class TriviaService {
         if (difficulty != null && !difficulty.equals("any")) {
             url.append("&difficulty=").append(difficulty);
         }
-        System.out.println(type);
         if (type != null && !type.equals("any")) {
             url.append("&type=").append(type);
         }
 
-        System.out.println(url);
         TriviaResponse question = restClient.
                 get()
                 .uri(String.valueOf(url))
                 .retrieve()
                 .body(TriviaResponse.class);
-        TriviaResponseEdited result = new TriviaResponseEdited(question.results().stream().map(this::transformQuestion).toList());
 
-        return result;
+        if (question != null && question.response_code() != 0) {
+            if (question.response_code() == 1) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "There werent enough questions available with these criteria. Try changing some parameters"
+                );
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Bad request to the API was made"
+                );
+            }
+        }
+
+        return new TriviaResponseEdited(question.results().stream().map(this::transformQuestion).toList());
 
     }
 
