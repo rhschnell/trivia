@@ -14,7 +14,6 @@ public record TriviaResponseEdited (List<EditedQuestion> results) {
                 List<String> answers,
                 @JsonIgnore String correctAnswer,
                 UUID id
-//                String correctAnswer
         ) {
         }
 }
