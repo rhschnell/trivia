@@ -1,6 +1,8 @@
 package quad_solutions.trivia.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import quad_solutions.trivia.response.TriviaResponse;
 import quad_solutions.trivia.response.TriviaResponseEdited;
 import quad_solutions.trivia.service.AnswerService;
@@ -22,9 +24,9 @@ public class TriviaController {
         this.answerService = answerService;
     }
 
-    @GetMapping("/get-questions")
+    @GetMapping("/questions")
     public TriviaResponseEdited getQuestions(
-            @RequestParam(defaultValue = "5") int amount,
+            @RequestParam(defaultValue = "1") int amount,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String difficulty,
             @RequestParam(required = false) String type) {
@@ -33,6 +35,10 @@ public class TriviaController {
 
     @PostMapping("/checkanswers")
     public Map<UUID, String> getAnswers(@RequestBody List<UUID> questionIDs) {
+        if (questionIDs == null || questionIDs.isEmpty()) {
+            return Map.of();
+        }
+
         Map<UUID, String> result = new HashMap<>();
         for (UUID id : questionIDs) {
             result.put(id, answerService.getAnswer(id));
