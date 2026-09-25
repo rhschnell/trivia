@@ -24,7 +24,7 @@ public class TriviaService {
         this.answerService = answerService;
     }
 
-    // Method to get n questions, without category, difficulty etc
+    // Method to get n questions, of a certain category, difficulty and type
     public TriviaResponseEdited getQuestions(int amount, String category, String difficulty, String type) {
 
         String url = buildURL(amount, category, difficulty, type);

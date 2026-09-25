@@ -4,9 +4,13 @@ let lastTimeCaptured = 0;
 const COOLDOWN = 5000;
 
 async function generateQuestions() {
-    if (cooldownCheck()) return;
-
     const url = buildURL();
+
+    if (!url) {
+        return;
+    }
+
+    if (cooldownCheck()) return;
 
     try {
         const response = await fetch(url);
@@ -54,12 +58,19 @@ async function getAnswers() {
 
 function buildURL() {
     const amount = document.getElementById("quantity").value;
+    if (!amount) {
+        alert("The amount given is not a valid number. Please try again.");
+        return;
+    } else if (amount < 1 || amount > 50) {
+        alert("The amount given should be a number between 1 and 50. Please try again.");
+        return;
+    }
+
     const category = document.getElementById("category").value;
     const difficulty = document.getElementById("difficulty").value;
     const type = document.getElementById("type").value;
 
-
-    let url = "http://localhost:8080/get-questions?amount=" + amount;
+    let url = "http://localhost:8080/questions?amount=" + amount;
 
     if (category !== "any") url += `&category=${category}`;
     if (difficulty !== "any") url += `&difficulty=${difficulty}`;
